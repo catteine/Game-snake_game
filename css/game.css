@@ -10,25 +10,55 @@ body {
 .stage .head,
 .stage .body {
   position: absolute;
-  width: 30px;
-  height: 30px;
   z-index: 5;
 }
 .stage .head {
-  background: #0f0;
-  opacity: .7;
+  background: green;
+}
+.stage .head.left {
+  transform: rotateZ(90deg);
+}
+.stage .head.right {
+  transform: rotateZ(-90deg);
+}
+.stage .head.down {
+  transform: rotateZ(0deg);
+}
+.stage .head.up {
+  transform: rotateZ(-180deg);
+}
+.stage .head:before {
+  position: absolute;
+  bottom: 10px;
+  left: 3px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #000;
+  content: '';
+  box-sizing: border-box;
+  box-shadow: 0 0 0 1px rgba(0,0,0,1);
+}
+.stage .head:after {
+  position: absolute;
+  bottom: 10px;
+  right: 3px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #000;
+  content: '';
+  box-sizing: border-box;
+  box-shadow: 0 0 0 1px rgba(0,0,0,1);
 }
 .stage .body {
-  background: #0f0;
-  opacity: .3;
+  background: green;
 }
 
 .stage .food {
   position: absolute;
-  width: 30px;
-  height: 30px;
-  background: orange;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  box-sizing: border-box;
+  background: url('../images/frog.jpg') no-repeat 50% 50%;
+  background-size: 80% 80%;
 }
