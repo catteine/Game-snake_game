@@ -32,6 +32,18 @@ Game.Snake = {
 // 먹이 객체 (스테이지에서 매번 먹이는 하나)
 Game.Food = {};
 
+// 스코어
+Game.Score = {
+  'el': document.querySelector('.score'),
+  'count': 0,
+};
+
+// 모달
+Game.Modal = {
+  'startModalEl' :  document.querySelector('.modal_start'),
+  'endModalEl' :  document.querySelector('.modal_end'),
+};
+
 // 스테이지 세팅
 Game.initStage = function(w, h, pS){
   const thisStage = this.Stage;
@@ -97,8 +109,8 @@ Game.drawFood = function(){
     // 랜덤값 계산
     const randX = Math.random() * (maxW - 1),
     randY = Math.random() * (maxH - 1),
-    posX = 30 * Math.floor(randX),
-    posY = 30 * Math.floor(randY);
+    posX = thisStage.pixelSize * Math.floor(randX),
+    posY = thisStage.pixelSize * Math.floor(randY);
     // 반복문 - 개선사항 : false 가 한번이라도 감지되면 루프를 그만돌게
     if ((thisSnake.head.pos[0] === posX) && (thisSnake.head.pos[1]) === posY) {
       isEmpty = false;
@@ -160,6 +172,11 @@ Game.eatFood = function(){
   this.drawFood();
   // 뱀 몸통 추가
   this.addSnakeBody();
+  // 점수 추가
+  let thisScore = this.Score.count;
+  thisScore = thisScore + 1;
+  this.Score.count = thisScore;
+  this.Score.el.textContent = thisScore;
 };
 
 // 충돌 체크
@@ -202,8 +219,8 @@ Game.snakeMoving = function(){
     // 뱀머리의 충돌 체크
     if (this.checkCollision(nextX, nextY)) {
       // 충돌 시
-      alert('END');
       clearInterval(moveKey);
+      this.gameOver();
     } else {
       // 기본 상황
       // 움직이는 타겟 DOM에 위치값 지정
@@ -249,49 +266,76 @@ Game.setDirection = function(keyCode){
       // spacebar
       if (!this.Stage.isPlaying) {
         this.Stage.isPlaying = true;
-        console.log('START');
-        this.snakeMoving();
+        this.gameStart();
       }
       break;
     case 37 :
-      if (this.Snake.vector[0] !== 1) {
-        console.log('left');
-        this.Snake.vector = [-1,0];
-        this.Snake.head.el.className = 'head left';
+      if (this.Stage.isPlaying) {
+        if (this.Snake.vector[0] !== 1) {
+          console.log('left');
+          this.Snake.vector = [-1,0];
+          this.Snake.head.el.className = 'head left';
+        }
       }
       break;
     case 38 :
-      if (this.Snake.vector[1] !== 1) {
-        console.log('up');
-        this.Snake.vector = [0,-1];
-        this.Snake.head.el.className = 'head up';
-      }
+        if (this.Stage.isPlaying) {
+          if (this.Snake.vector[1] !== 1) {
+            console.log('up');
+            this.Snake.vector = [0,-1];
+            this.Snake.head.el.className = 'head up';
+          }
+        }
       break;
     case 39 :
-      if (this.Snake.vector[0] !== -1) {
-        console.log('right');
-        this.Snake.vector = [1,0];
-        this.Snake.head.el.className = 'head right';
-      }
+        if (this.Stage.isPlaying) {
+          if (this.Snake.vector[0] !== -1) {
+            console.log('right');
+            this.Snake.vector = [1,0];
+            this.Snake.head.el.className = 'head right';
+          }
+        }
       break;
     case 40 :
-      if (this.Snake.vector[1] !== -1) {
-        console.log('down');
-        this.Snake.vector = [0,1];
-        this.Snake.head.el.className = 'head down';
-      }
+        if (this.Stage.isPlaying) {
+          if (this.Snake.vector[1] !== -1) {
+            console.log('down');
+            this.Snake.vector = [0,1];
+            this.Snake.head.el.className = 'head down';
+          }
+        }
       break;
   }
+};
+
+// 게임 시작
+Game.gameStart = function(){
+  console.log('GameStart');
+  this.snakeMoving();
+  this.Modal.startModalEl.style.display = "none";
+};
+
+// 게임 끝
+Game.gameOver = function(){
+  console.log('GameOver');
+  const thisModalEL = this.Modal.endModalEl;
+  thisModalEL.querySelector('.score').textContent = this.Score.count;
+  thisModalEL.style.display = "block";
 };
 
 Game.init = function(){
   // 게임 기본값
   const pixelSize = 30,
-        width = pixelSize * 22,
-        height = pixelSize * 22;
+        width = pixelSize * 30,
+        height = pixelSize * 20;
 
   // 게임 세팅
   this.initStage(width, height, pixelSize);
+
+  // 재시작 세팅
+  this.Modal.endModalEl.querySelector('button').addEventListener('click', () => {
+    location.reload();
+  });
 };
 
 Game.init();
