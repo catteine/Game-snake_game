@@ -1,6 +1,6 @@
 # Games-snake_game
 
-https://catteine.github.io/Games-snake_game/game.html
+https://catteine.github.io/Toy-Game-snake_game/game.html
 
 ## 뱀 게임
 뱀이 기어 다니면서 먹이를 먹고 점점 커지는 게임
